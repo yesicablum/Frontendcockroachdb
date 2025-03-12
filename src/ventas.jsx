@@ -1,14 +1,34 @@
 import './ventas.css'
 import { Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
+
+const initialData = [
+    [1, "Laptop", 1200.50, 10],
+    [2, "Mouse", 25.99, 50],
+    [3, "Teclado", 45.00, 30],
+    [4, "Monitor", 1500.00, 20],
+    [5, "Cargador", 75.00, 40]
+];
+
 const Ventas = () => {
-    const listarPoductos = (message) => {
-        alert(message);
-        console.log(message);
-    };
-    
+    const [productos, setProductos] = useState([]);
+    const [resumenVenta, setResumenVenta] = useState([])
+
+    useEffect(() => {
+        setProductos(initialData);
+    }, []);
+
+    const agregarProducto = () => {
+        const productoId = parseInt(document.querySelector(".select-product").value);
+        const cantidad = parseInt(document.querySelector(".input").value);
+        const productoSeleccionado = productos.find((producto) => producto[0] === productoId);
+        if (productoSeleccionado && cantidad > 0) {
+            const total = productoSeleccionado[2] * cantidad;
+            setResumenVenta([...resumenVenta, [productoSeleccionado[1], cantidad, total]]);
+        }
+    }
+
     return (
-        
-    
         <div className="container">
             <nav className="navbar">
                 <h1 className="logo">Tienda</h1>
@@ -25,36 +45,34 @@ const Ventas = () => {
 
                     <div className="add-product">
                         <h2>Agregar Productos</h2>
-                        <select className="select-product"onClick={()=> listarPoductos()}>
-                            <option>Producto 1 - $100</option>
-                            <option>Producto 2 - $200</option>
+                        <select className="select-product">
+                            {productos.map(producto => (
+                                <option key={producto[0]} value={producto[0]}>
+                                    {producto[1]} - ${producto[2]}
+                                </option>
+                            ))}
                         </select>
                         <input type="number" className="input" placeholder="Cantidad" />
-                        <button className="button add-btn" >🛒 Agregar a la venta</button>
+                        <button className="button add-btn" onClick={agregarProducto} >🛒 Agregar a la venta</button>
                     </div>
 
                     <div className="sales-summary">
                         <h2>Resumen de Venta</h2>
-                        <div className="summary-item">
-                            <p>Producto 1 <br /> <span>3 x $100</span></p>
-                            <p>$300</p>
-                        </div>
-                        <div className="summary-item">
-                            <p>Producto 2 <br /> <span>10 x $200</span></p>
-                            <p>$2000</p>
-                        </div>
-                        <hr />
-                        <div className="total">
-                            <p><strong>Total:</strong></p>
-                            <p><strong>$2300</strong></p>
-                        </div>
+                        {resumenVenta.length > 0 ? (
+                            resumenVenta.map((item, index) => (
+                                <div key={index} className="summary-item">
+                                    <p>{item[0]} <br /> <span>{item[1]} x ${item[2] / item[1]}</span></p>
+                                    <p>${item[2]}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No hay productos en la venta</p>
+                        )}
                         <button className="button download-btn">📂 Finalizar y Descargar CSV</button>
                     </div>
                 </div>
             </div>
-
         </div>
-
     )
 }
 
