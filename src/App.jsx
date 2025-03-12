@@ -1,14 +1,15 @@
 import './App.css'
-import Inventario from './inventario'
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Ventas from './ventas';
+import Navbar from './components/Navbar';
+import Inventario from './pages/inventario/inventario';
+import Ventas from './pages/ventas/ventas';
 
 function App() {
 
   return (
     <>
       <Router>
-
+        <Navbar />
         <Routes>
           <Route path="/" element={<Inventario />} />
           <Route path="/ventas" element={<Ventas />} />
