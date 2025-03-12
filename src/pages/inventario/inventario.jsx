@@ -30,7 +30,7 @@ const Inventario = () => {
     }
 
     const consultarProductos = () => {
-        fetch('http://127.0.0.1:5000/productos')
+        fetch('https://aplicativo-web-cockroach-db.vercel.app/productos')
             .then(response => response.json())
             .then(data => setProductos(data.productos))
             .catch(error => console.error('Error fetching products:', error));
